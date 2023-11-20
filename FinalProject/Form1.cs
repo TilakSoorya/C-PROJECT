@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,48 @@ namespace FinalProject
         private void label1_Click_1(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
+            string constring = "Data Source=(local);Initial Catalog=Store;Integrated Security=True;Encrypt=False";
+
+            SqlConnection conn = new SqlConnection(constring);
+            try
+            {
+                string checkUserSql = "SELECT COUNT(*) FROM [User] WHERE email = @email and @password = @password";
+                SqlCommand checkUserCmd = new SqlCommand(checkUserSql, conn);
+                checkUserCmd.Parameters.AddWithValue("@email", textBox1.Text);
+                checkUserCmd.Parameters.AddWithValue("@password", textBox2.Text);
+
+                conn.Open();
+
+                int existingUserCount = (int)checkUserCmd.ExecuteScalar();
+
+                if (existingUserCount > 0)
+                {
+                    Home h = new Home();
+                    h.Email = textBox1.Text;
+                    h.Show();
+                    
+                }
+                
+                else
+                {
+                    MessageBox.Show("Invalid Credentials");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error:404");
+            }
+            finally
+            {
+                //Step 7: Close Connection
+                conn.Close();
+            }
         }
     }
 }
