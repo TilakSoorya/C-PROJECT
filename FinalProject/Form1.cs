@@ -52,8 +52,17 @@ namespace FinalProject
 
                 if (existingUserCount > 0)
                 {
+                    this.Hide();
                     Home h = new Home();
+                    string user = "SELECT COUNT(*) FROM [User]";
+                    string prod = "SELECT COUNT(*) FROM [Products]";
+                    SqlCommand usercmd = new SqlCommand(user, conn);
+                    SqlCommand prodcmd = new SqlCommand(prod, conn);
+                    int userCount = (int)usercmd.ExecuteScalar();
+                    int prodCount = (int)prodcmd.ExecuteScalar();
                     h.Email = textBox1.Text;
+                    h.TtlUsers = userCount.ToString();
+                    h.TtlProd = prodCount.ToString();
                     h.Show();
                     
                 }
